@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Web.Models;
+﻿namespace Energizet.Box.Web.Models.Auth;
 
 public class User
 {

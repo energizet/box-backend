@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Energizet.Box.Web.Models;
+using Energizet.Box.Web.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -18,17 +19,17 @@ namespace Energizet.Box.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<User> Post(User user)
+		public ActionResult<User> Post(User user)
 		{
 			var secretUserStr = _vkConfig.AppId + user.Uid + _vkConfig.SecretKey;
 
 			using var md5 = MD5.Create();
-			if (VerifyHash(md5, secretUserStr, user.Hash))
+			if (VerifyHash(md5, secretUserStr, user.Hash) == false)
 			{
-				return user;
+				return BadRequest();
 			}
 
-			return Models.User.Empty;
+			return user;
 		}
 
 		private static string GetHash(HashAlgorithm hashAlgorithm, string input)

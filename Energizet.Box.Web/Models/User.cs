@@ -2,6 +2,8 @@
 
 public class User
 {
+	public static readonly User Empty = new();
+
 	public int Uid { get; set; }
 	public string FirstName { get; set; } = string.Empty;
 	public string LastName { get; set; } = string.Empty;

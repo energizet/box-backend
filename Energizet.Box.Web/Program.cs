@@ -18,8 +18,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(policyBuilder =>
+{
+	policyBuilder
+		.WithOrigins(
+			"https://energizet.ru",
+			"http://localhost:3000"
+		)
+		.AllowAnyHeader()
+		.AllowAnyMethod();
+});
 app.UseStaticFiles();
-
 app.MapFallbackToFile("index.html");
 
 app.UseAuthorization();

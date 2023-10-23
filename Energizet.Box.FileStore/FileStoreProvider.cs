@@ -1,6 +1,8 @@
-﻿namespace Energizet.Box.FileStore;
+﻿using Energizet.Box.Store.Abstraction;
 
-public sealed class FileStoreProvider
+namespace Energizet.Box.FileStore;
+
+public sealed class FileStoreProvider : IStoreProvider
 {
 	private readonly string _tempDir;
 	private readonly string _storeDir;

@@ -8,7 +8,7 @@ public class VkResponse<T>
 	public T[] Response { get; set; } = Array.Empty<T>();
 }
 
-public class VkUser
+public class VkUserResponse
 {
 	[JsonPropertyName("id")]
 	public int Id { get; set; }

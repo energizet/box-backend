@@ -1,5 +1,4 @@
-﻿using System.Security;
-using Energizet.Box.Vk.Abstractions;
+﻿using Energizet.Box.Vk.Abstractions;
 using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;

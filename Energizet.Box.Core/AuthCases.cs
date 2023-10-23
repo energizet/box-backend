@@ -1,4 +1,4 @@
-﻿using System.Security;
+﻿using Energizet.Box.Exceptions;
 using Energizet.Box.Vk.Abstractions;
 
 namespace Energizet.Box.Core;
@@ -18,7 +18,7 @@ public sealed class AuthCases
 
 		if (verifyHash == false)
 		{
-			throw new VerificationException("Incorrect hash");
+			throw new HashIncorrectExceptions("Incorrect hash");
 		}
 
 		return new

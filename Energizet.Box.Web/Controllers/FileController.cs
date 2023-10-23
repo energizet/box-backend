@@ -1,6 +1,7 @@
-using Energizet.Box.Db;
-using Energizet.Box.FileStore;
-using Energizet.Box.Vk;
+using Energizet.Box.Db.Abstractions;
+using Energizet.Box.Exceptions;
+using Energizet.Box.Store.Abstraction;
+using Energizet.Box.Vk.Abstractions;
 using Energizet.Box.Web.Models.File;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace Energizet.Box.Web.Controllers;
 [ApiController]
 public sealed class FileController : ControllerBase
 {
-	private readonly FileStoreProvider _storeProvider;
-	private readonly VkProvider _vkProvider;
-	private readonly DbProvider _dbProvider;
+	private readonly IStoreProvider _storeProvider;
+	private readonly IVkProvider _vkProvider;
+	private readonly IDbProvider _dbProvider;
 
-	public FileController(FileStoreProvider storeProvider, VkProvider vkProvider, DbProvider dbProvider)
+	public FileController(
+		IStoreProvider storeProvider, IVkProvider vkProvider, IDbProvider dbProvider
+	)
 	{
 		_storeProvider = storeProvider;
 		_vkProvider = vkProvider;
@@ -45,11 +48,6 @@ public sealed class FileController : ControllerBase
 			var vkId = saveRequest.VkLink.Split("/").Last();
 			var vkUser = await _vkProvider.GetVkUser(vkId, token);
 
-			if (vkUser == null)
-			{
-				return BadRequest();
-			}
-
 			await _storeProvider.SaveAsync(saveRequest.Id);
 			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
 
@@ -58,7 +56,7 @@ public sealed class FileController : ControllerBase
 				Ok = true,
 			};
 		}
-		catch (ArgumentException ex)
+		catch (NotFoundException ex)
 		{
 			return NotFound(ex);
 		}
@@ -79,7 +77,7 @@ public sealed class FileController : ControllerBase
 				VkUser = vkUser,
 			};
 		}
-		catch (ArgumentException ex)
+		catch (NotFoundException ex)
 		{
 			return NotFound(ex);
 		}

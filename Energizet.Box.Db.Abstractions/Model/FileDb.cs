@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Db.Model;
+﻿namespace Energizet.Box.Db.Abstractions.Model;
 
 public class FileDb
 {

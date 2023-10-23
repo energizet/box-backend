@@ -1,8 +1,10 @@
-﻿using Energizet.Box.Db.Model;
+﻿using Energizet.Box.Db.Abstractions;
+using Energizet.Box.Db.Abstractions.Model;
+using Energizet.Box.Exceptions;
 
 namespace Energizet.Box.Db;
 
-public sealed class DbProvider
+public sealed class DbProvider : IDbProvider
 {
 	public async Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token
@@ -32,7 +34,7 @@ public sealed class DbProvider
 
 		if (file == null)
 		{
-			throw new ArgumentException($"id({id}) not found");
+			throw new NotFoundException($"id({id}) not found");
 		}
 
 		var fileDb = new FileDb

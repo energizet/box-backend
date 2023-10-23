@@ -14,6 +14,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Db", "Energiz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Vk.Abstractions", "Energizet.Box.Vk.Abstractions\Energizet.Box.Vk.Abstractions.csproj", "{218EF4DA-4D2F-4C65-9F61-3576B6F1A39A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Store.Abstraction", "Energizet.Box.Store.Abstraction\Energizet.Box.Store.Abstraction.csproj", "{7EFD3D33-27B7-4FA2-BE8B-55F07B993046}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Exceptions", "Energizet.Box.Exceptions\Energizet.Box.Exceptions.csproj", "{A69AD417-84CA-478D-8B8A-9D86104DEEE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Db.Abstractions", "Energizet.Box.Db.Abstractions\Energizet.Box.Db.Abstractions.csproj", "{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +54,17 @@ Global
 		{218EF4DA-4D2F-4C65-9F61-3576B6F1A39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{218EF4DA-4D2F-4C65-9F61-3576B6F1A39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{218EF4DA-4D2F-4C65-9F61-3576B6F1A39A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EFD3D33-27B7-4FA2-BE8B-55F07B993046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EFD3D33-27B7-4FA2-BE8B-55F07B993046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EFD3D33-27B7-4FA2-BE8B-55F07B993046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EFD3D33-27B7-4FA2-BE8B-55F07B993046}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69AD417-84CA-478D-8B8A-9D86104DEEE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69AD417-84CA-478D-8B8A-9D86104DEEE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69AD417-84CA-478D-8B8A-9D86104DEEE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69AD417-84CA-478D-8B8A-9D86104DEEE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

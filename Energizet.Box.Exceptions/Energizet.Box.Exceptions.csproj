@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Energizet.Box.Store.Abstraction\Energizet.Box.Store.Abstraction.csproj" />
-    </ItemGroup>
-
 </Project>

@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Energizet.Box.Db.Abstractions\Energizet.Box.Db.Abstractions.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Exceptions\Energizet.Box.Exceptions.csproj" />
+    </ItemGroup>
+
 </Project>

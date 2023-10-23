@@ -1,6 +1,5 @@
-using System.Security;
 using Energizet.Box.Core;
-using Energizet.Box.Vk;
+using Energizet.Box.Exceptions;
 using Energizet.Box.Web.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +23,7 @@ public sealed class AuthController : ControllerBase
 		{
 			return await _authCases.AuthAsync(user.Uid, user.Hash, token);
 		}
-		catch (VerificationException ex)
+		catch (HashIncorrectExceptions ex)
 		{
 			return BadRequest(ex);
 		}

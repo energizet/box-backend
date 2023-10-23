@@ -1,4 +1,4 @@
-﻿using Energizet.Box.Vk.Model;
+﻿using Energizet.Box.Vk.Abstractions.Model;
 
 namespace Energizet.Box.Web.Models.File;
 

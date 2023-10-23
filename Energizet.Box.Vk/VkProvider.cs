@@ -1,11 +1,14 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Energizet.Box.Exceptions;
+using Energizet.Box.Vk.Abstractions;
+using Energizet.Box.Vk.Abstractions.Model;
 using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;
 
-public sealed class VkProvider : IDisposable
+public sealed class VkProvider : IVkProvider, IDisposable
 {
 	private readonly HttpClient _client;
 
@@ -17,7 +20,7 @@ public sealed class VkProvider : IDisposable
 			new AuthenticationHeaderValue("Bearer", vkConfig.ServiceKey);
 	}
 
-	public async Task<VkUser?> GetVkUser(string vkId, CancellationToken token)
+	public async Task<VkUser> GetVkUser(string vkId, CancellationToken token)
 	{
 		using var formData = new MultipartFormDataContent();
 		formData.Add(new StringContent(vkId), "user_ids");
@@ -31,20 +34,26 @@ public sealed class VkProvider : IDisposable
 
 		if (res.StatusCode == HttpStatusCode.NotFound)
 		{
-			throw new ArgumentException($"id({vkId}) not found");
+			throw new NotFoundException($"id({vkId}) not found");
 		}
 
 		var vkUserJson = await res.Content.ReadAsStringAsync(token);
-		var vkResponse = JsonSerializer.Deserialize<VkResponse<VkUser>>(vkUserJson);
+		var vkResponse = JsonSerializer.Deserialize<VkResponse<VkUserResponse>>(vkUserJson);
 
 		var vkUser = vkResponse?.Response.FirstOrDefault();
 
 		if (vkUser == null)
 		{
-			throw new ArgumentException($"id({vkId}) not found");
+			throw new NotFoundException($"id({vkId}) not found");
 		}
 
-		return vkUser;
+		return new()
+		{
+			Id = vkUser.Id,
+			FirstName = vkUser.FirstName,
+			LastName = vkUser.LastName,
+			Photo = vkUser.Photo,
+		};
 	}
 
 	public void Dispose()

@@ -1,9 +1,10 @@
 ﻿using System.Security;
+using Energizet.Box.Vk.Abstractions;
 using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;
 
-public sealed class AuthProvider : IDisposable
+public sealed class AuthProvider : IAuthProvider
 {
 	private readonly VkConfig _vkConfig;
 	private readonly HashProvider _hashProvider;
@@ -14,23 +15,10 @@ public sealed class AuthProvider : IDisposable
 		_hashProvider = hashProvider;
 	}
 
-	public async Task<object> AuthAsync(int vkUserId, string hash, CancellationToken token)
+	public Task<bool> VerifyHashAsync(int vkUserId, string hash, CancellationToken token)
 	{
 		var secretUserStr = _vkConfig.AppId + vkUserId + _vkConfig.SecretKey;
 
-		if (_hashProvider.VerifyHash(secretUserStr, hash) == false)
-		{
-			throw new VerificationException("Incorrect hash");
-		}
-
-		return new
-		{
-			Ok = true,
-		};
-	}
-
-	public void Dispose()
-	{
-		_hashProvider.Dispose();
+		return Task.FromResult(_hashProvider.VerifyHash(secretUserStr, hash));
 	}
 }

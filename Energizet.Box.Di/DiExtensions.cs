@@ -1,7 +1,9 @@
 ﻿using System.Security.Cryptography;
+using Energizet.Box.Core;
 using Energizet.Box.Db;
 using Energizet.Box.FileStore;
 using Energizet.Box.Vk;
+using Energizet.Box.Vk.Abstractions;
 using Energizet.Box.Vk.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,11 +27,12 @@ public static class DiExtensions
 			provider => provider.GetRequiredService<IOptions<VkConfig>>().Value
 		);
 		collection.AddScoped<HashProvider>(_ => new HashProvider(MD5.Create()));
-		collection.AddScoped<AuthProvider>();
-		collection.AddScoped<FileProvider>(_ => new FileProvider("./tmp", "./store"));
+		collection.AddScoped<IAuthProvider, AuthProvider>();
+		collection.AddScoped<FileStoreProvider>(_ => new FileStoreProvider("./tmp", "./store"));
 		collection.AddScoped<VkProvider>();
 		collection.AddTransient<HttpClient>();
 		collection.AddScoped<DbProvider>();
+		collection.AddScoped<AuthCases>();
 
 		return collection;
 	}

@@ -1,4 +1,5 @@
 using System.Security;
+using Energizet.Box.Core;
 using Energizet.Box.Vk;
 using Energizet.Box.Web.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
@@ -7,13 +8,13 @@ namespace Energizet.Box.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public sealed class AuthController : ControllerBase, IDisposable
+public sealed class AuthController : ControllerBase
 {
-	private readonly AuthProvider _authProvider;
+	private readonly AuthCases _authCases;
 
-	public AuthController(AuthProvider authProvider)
+	public AuthController(AuthCases authCases)
 	{
-		_authProvider = authProvider;
+		_authCases = authCases;
 	}
 
 	[HttpPost]
@@ -21,16 +22,11 @@ public sealed class AuthController : ControllerBase, IDisposable
 	{
 		try
 		{
-			return await _authProvider.AuthAsync(user.Uid, user.Hash, token);
+			return await _authCases.AuthAsync(user.Uid, user.Hash, token);
 		}
 		catch (VerificationException ex)
 		{
 			return BadRequest(ex);
 		}
-	}
-
-	public void Dispose()
-	{
-		_authProvider.Dispose();
 	}
 }

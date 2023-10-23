@@ -1,5 +1,4 @@
 using Energizet.Box.Db;
-using Energizet.Box.Db.Model;
 using Energizet.Box.FileStore;
 using Energizet.Box.Vk;
 using Energizet.Box.Web.Models.File;
@@ -9,15 +8,15 @@ namespace Energizet.Box.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public sealed class FileController : ControllerBase, IDisposable
+public sealed class FileController : ControllerBase
 {
-	private readonly FileProvider _fileProvider;
+	private readonly FileStoreProvider _storeProvider;
 	private readonly VkProvider _vkProvider;
 	private readonly DbProvider _dbProvider;
 
-	public FileController(FileProvider fileProvider, VkProvider vkProvider, DbProvider dbProvider)
+	public FileController(FileStoreProvider storeProvider, VkProvider vkProvider, DbProvider dbProvider)
 	{
-		_fileProvider = fileProvider;
+		_storeProvider = storeProvider;
 		_vkProvider = vkProvider;
 		_dbProvider = dbProvider;
 	}
@@ -29,7 +28,7 @@ public sealed class FileController : ControllerBase, IDisposable
 	{
 		var id = Guid.NewGuid();
 
-		await using var tmpFile = await _fileProvider.NewAsync(id);
+		await using var tmpFile = await _storeProvider.NewAsync(id);
 		await file.CopyToAsync(tmpFile, token);
 
 		return new UploadResponse
@@ -51,7 +50,7 @@ public sealed class FileController : ControllerBase, IDisposable
 				return BadRequest();
 			}
 
-			await _fileProvider.SaveAsync(saveRequest.Id);
+			await _storeProvider.SaveAsync(saveRequest.Id);
 			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
 
 			return new
@@ -84,10 +83,5 @@ public sealed class FileController : ControllerBase, IDisposable
 		{
 			return NotFound(ex);
 		}
-	}
-
-	public void Dispose()
-	{
-		_vkProvider.Dispose();
 	}
 }

@@ -29,10 +29,12 @@ public sealed class FileController : ControllerBase
 		IFormFile file, CancellationToken token
 	)
 	{
-		var id = Guid.NewGuid();
+		await using var streamFile = new MemoryStream();
+		await file.CopyToAsync(streamFile, token);
+		streamFile.Position = 0;
 
-		await using var tmpFile = await _storeProvider.NewAsync(id);
-		await file.CopyToAsync(tmpFile, token);
+		var id = await _dbProvider.NewAsync(token);
+		await _storeProvider.NewAsync(id, streamFile, token);
 
 		return new UploadResponse
 		{
@@ -50,7 +52,7 @@ public sealed class FileController : ControllerBase
 			var vkId = saveRequest.VkLink.Split("/").Last();
 			var vkUser = await _vkProvider.GetVkUser(vkId, token);
 
-			await _storeProvider.SaveAsync(saveRequest.Id);
+			await _storeProvider.SaveAsync(saveRequest.Id, token);
 			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
 
 			return new SaveResponse

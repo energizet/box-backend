@@ -6,6 +6,11 @@ namespace Energizet.Box.Db;
 
 public sealed class DbProvider : IDbProvider
 {
+	public Task<Guid> NewAsync(CancellationToken token)
+	{
+		return Task.FromResult(Guid.NewGuid());
+	}
+
 	public async Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token
 	)

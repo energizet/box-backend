@@ -2,6 +2,6 @@
 
 public interface IStoreProvider
 {
-	Task<Stream> NewAsync(Guid id);
-	Task SaveAsync(Guid id);
+	Task NewAsync(Guid id, Stream stream, CancellationToken token);
+	Task SaveAsync(Guid id, CancellationToken token);
 }

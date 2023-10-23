@@ -13,12 +13,13 @@ public sealed class FileStoreProvider : IStoreProvider
 		_storeDir = storeDir;
 	}
 
-	public Task<Stream> NewAsync(Guid id)
+	public async Task NewAsync(Guid id, Stream stream, CancellationToken token)
 	{
-		return CreateAsync(_tempDir, id);
+		await using var newFile = await CreateAsync(_tempDir, id);
+		await stream.CopyToAsync(newFile, token);
 	}
 
-	public Task SaveAsync(Guid id)
+	public Task SaveAsync(Guid id, CancellationToken token)
 	{
 		var sourceFileName = CreatePath(_tempDir, id);
 		var destFileName = CreatePath(_storeDir, id);

@@ -4,6 +4,8 @@ namespace Energizet.Box.Db.Abstractions;
 
 public interface IDbProvider
 {
+	Task<Guid> NewAsync(CancellationToken token);
+
 	Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token
 	);

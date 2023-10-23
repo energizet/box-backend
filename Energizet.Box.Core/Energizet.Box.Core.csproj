@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Energizet.Box.Db.Abstractions\Energizet.Box.Db.Abstractions.csproj" />
       <ProjectReference Include="..\Energizet.Box.Entities\Energizet.Box.Entities.csproj" />
       <ProjectReference Include="..\Energizet.Box.Exceptions\Energizet.Box.Exceptions.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Db.Abstractions\Energizet.Box.Db.Abstractions.csproj" />
       <ProjectReference Include="..\Energizet.Box.Store.Abstraction\Energizet.Box.Store.Abstraction.csproj" />
       <ProjectReference Include="..\Energizet.Box.Vk.Abstractions\Energizet.Box.Vk.Abstractions.csproj" />
     </ItemGroup>

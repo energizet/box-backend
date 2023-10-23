@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Energizet.Box.Auth;
+namespace Energizet.Box.Vk;
 
 public class HashProvider : IDisposable
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Energizet.Box.Web.Models;
+namespace Energizet.Box.Vk.Model;
 
 public class VkResponse<T>
 {

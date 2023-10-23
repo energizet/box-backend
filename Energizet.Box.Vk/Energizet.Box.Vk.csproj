@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Energizet.Box.Entities\Energizet.Box.Entities.csproj" />
-    </ItemGroup>
-
 </Project>

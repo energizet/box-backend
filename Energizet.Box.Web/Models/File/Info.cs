@@ -1,4 +1,6 @@
-﻿namespace Energizet.Box.Web.Models.File;
+﻿using Energizet.Box.Vk.Model;
+
+namespace Energizet.Box.Web.Models.File;
 
 public class InfoResponse
 {

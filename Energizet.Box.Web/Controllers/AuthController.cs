@@ -1,37 +1,36 @@
 using System.Security;
-using Energizet.Box.Auth;
+using Energizet.Box.Vk;
 using Energizet.Box.Web.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Energizet.Box.Web.Controllers
+namespace Energizet.Box.Web.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController : ControllerBase, IDisposable
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AuthController : ControllerBase, IDisposable
+	private readonly AuthProvider _authProvider;
+
+	public AuthController(AuthProvider authProvider)
 	{
-		private readonly AuthProvider _authProvider;
+		_authProvider = authProvider;
+	}
 
-		public AuthController(AuthProvider authProvider)
+	[HttpPost]
+	public ActionResult<object> Post(User user)
+	{
+		try
 		{
-			_authProvider = authProvider;
+			return _authProvider.Auth(user.Uid, user.Hash);
 		}
+		catch (VerificationException ex)
+		{
+			return BadRequest(ex);
+		}
+	}
 
-		[HttpPost]
-		public ActionResult<object> Post(User user)
-		{
-			try
-			{
-				return _authProvider.Auth(user.Uid, user.Hash);
-			}
-			catch (VerificationException ex)
-			{
-				return BadRequest(ex);
-			}
-		}
-
-		public void Dispose()
-		{
-			_authProvider.Dispose();
-		}
+	public void Dispose()
+	{
+		_authProvider.Dispose();
 	}
 }

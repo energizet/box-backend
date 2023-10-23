@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Entities;
+﻿namespace Energizet.Box.Vk.Model;
 
 public class VkConfig
 {

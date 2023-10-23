@@ -1,7 +1,7 @@
 ﻿using System.Security;
-using Energizet.Box.Entities;
+using Energizet.Box.Vk.Model;
 
-namespace Energizet.Box.Auth;
+namespace Energizet.Box.Vk;
 
 public class AuthProvider : IDisposable
 {

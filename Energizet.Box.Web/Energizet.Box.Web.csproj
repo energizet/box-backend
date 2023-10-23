@@ -19,9 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Energizet.Box.Auth\Energizet.Box.Auth.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Vk\Energizet.Box.Vk.csproj" />
       <ProjectReference Include="..\Energizet.Box.Di\Energizet.Box.Di.csproj" />
-      <ProjectReference Include="..\Energizet.Box.Entities\Energizet.Box.Entities.csproj" />
+      <ProjectReference Include="..\Energizet.Box.FileStore\Energizet.Box.FileStore.csproj" />
     </ItemGroup>
 
 </Project>

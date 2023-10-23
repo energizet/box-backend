@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Energizet.Box.Db;
 using Energizet.Box.FileStore;
 using Energizet.Box.Vk;
 using Energizet.Box.Vk.Model;
@@ -28,6 +29,7 @@ public static class DiExtensions
 		collection.AddScoped<FileProvider>(_ => new FileProvider("./tmp", "./store"));
 		collection.AddScoped<VkProvider>();
 		collection.AddTransient<HttpClient>();
+		collection.AddScoped<DbProvider>();
 
 		return collection;
 	}

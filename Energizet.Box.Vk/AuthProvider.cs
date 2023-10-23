@@ -14,7 +14,7 @@ public class AuthProvider : IDisposable
 		_hashProvider = hashProvider;
 	}
 
-	public object Auth(int vkUserId, string hash)
+	public async Task<object> AuthAsync(int vkUserId, string hash, CancellationToken token)
 	{
 		var secretUserStr = _vkConfig.AppId + vkUserId + _vkConfig.SecretKey;
 

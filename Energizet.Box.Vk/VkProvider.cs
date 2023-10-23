@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using Energizet.Box.Vk.Model;
 
@@ -24,11 +25,25 @@ public class VkProvider : IDisposable
 		formData.Add(new StringContent("ru"), "lang");
 		formData.Add(new StringContent("5.154"), "v");
 
-		var res = await _client.PostAsync("https://api.vk.com/method/users.get", formData,
-			token);
+		var res = await _client.PostAsync(
+			"https://api.vk.com/method/users.get", formData, token
+		);
+
+		if (res.StatusCode == HttpStatusCode.NotFound)
+		{
+			throw new ArgumentException($"id({vkId}) not found");
+		}
+
 		var vkUserJson = await res.Content.ReadAsStringAsync(token);
-		var vkUser = JsonSerializer.Deserialize<VkResponse<VkUser>>(vkUserJson)
-			?.Response.FirstOrDefault();
+		var vkResponse = JsonSerializer.Deserialize<VkResponse<VkUser>>(vkUserJson);
+
+		var vkUser = vkResponse?.Response.FirstOrDefault();
+
+		if (vkUser == null)
+		{
+			throw new ArgumentException($"id({vkId}) not found");
+		}
+
 		return vkUser;
 	}
 

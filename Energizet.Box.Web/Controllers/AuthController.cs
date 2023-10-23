@@ -17,11 +17,11 @@ public class AuthController : ControllerBase, IDisposable
 	}
 
 	[HttpPost]
-	public ActionResult<object> Post(User user)
+	public async Task<ActionResult<object>> Post(User user, CancellationToken token)
 	{
 		try
 		{
-			return _authProvider.Auth(user.Uid, user.Hash);
+			return await _authProvider.AuthAsync(user.Uid, user.Hash, token);
 		}
 		catch (VerificationException ex)
 		{

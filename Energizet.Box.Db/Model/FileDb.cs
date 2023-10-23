@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Web.Models.File;
+﻿namespace Energizet.Box.Db.Model;
 
 public class FileDb
 {

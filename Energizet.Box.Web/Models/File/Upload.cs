@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Web.Models.Upload;
+﻿namespace Energizet.Box.Web.Models.File;
 
 public class UploadResponse
 {

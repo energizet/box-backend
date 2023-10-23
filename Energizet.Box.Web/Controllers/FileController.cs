@@ -1,7 +1,8 @@
+using Energizet.Box.Db;
+using Energizet.Box.Db.Model;
 using Energizet.Box.FileStore;
 using Energizet.Box.Vk;
 using Energizet.Box.Web.Models.File;
-using Energizet.Box.Web.Models.Upload;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Energizet.Box.Web.Controllers;
@@ -12,16 +13,19 @@ public class FileController : ControllerBase, IDisposable
 {
 	private readonly FileProvider _fileProvider;
 	private readonly VkProvider _vkProvider;
+	private readonly DbProvider _dbProvider;
 
-	public FileController(FileProvider fileProvider, VkProvider vkProvider)
+	public FileController(FileProvider fileProvider, VkProvider vkProvider, DbProvider dbProvider)
 	{
 		_fileProvider = fileProvider;
 		_vkProvider = vkProvider;
+		_dbProvider = dbProvider;
 	}
 
 	[HttpPost("[action]")]
-	public async Task<ActionResult<UploadResponse>> Upload(IFormFile file,
-		CancellationToken token)
+	public async Task<ActionResult<UploadResponse>> Upload(
+		IFormFile file, CancellationToken token
+	)
 	{
 		var id = Guid.NewGuid();
 
@@ -35,78 +39,51 @@ public class FileController : ControllerBase, IDisposable
 	}
 
 	[HttpPost("[action]")]
-	public async Task<IActionResult> Save(SaveRequest saveRequest, CancellationToken token)
+	public async Task<ActionResult<object>> Save(SaveRequest saveRequest, CancellationToken token)
 	{
-		var vkId = saveRequest.VkLink.Split("/").Last();
-
-		var vkUser = await _vkProvider.GetVkUser(vkId, token);
-
-		if (vkUser == null)
+		try
 		{
-			return BadRequest();
+			var vkId = saveRequest.VkLink.Split("/").Last();
+			var vkUser = await _vkProvider.GetVkUser(vkId, token);
+
+			if (vkUser == null)
+			{
+				return BadRequest();
+			}
+
+			await _fileProvider.SaveAsync(saveRequest.Id);
+			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
+
+			return new
+			{
+				Ok = true,
+			};
 		}
-
-		await _fileProvider.SaveAsync(saveRequest.Id);
-
-		if (Directory.Exists("./db") == false)
+		catch (ArgumentException ex)
 		{
-			Directory.CreateDirectory("./db");
+			return NotFound(ex);
 		}
-
-		if (System.IO.File.Exists("./db/files.txt") == false)
-		{
-			await using var tmpFile = System.IO.File.Create("./db/files.txt");
-		}
-
-		await System.IO.File.AppendAllLinesAsync(
-			"./db/files.txt",
-			new[] { $"{saveRequest.Id}|{saveRequest.Title}|{vkUser.Id}" },
-			token
-		);
-
-		return Ok();
 	}
 
 	[HttpGet("{id:guid}")]
-	public async Task<ActionResult<InfoResponse>> Info(Guid id,
-		CancellationToken token)
+	public async Task<ActionResult<InfoResponse>> Info(Guid id, CancellationToken token)
 	{
-		if (Directory.Exists("./db") == false)
+		try
 		{
-			Directory.CreateDirectory("./db");
+			var fileDb = await _dbProvider.Find(id, token);
+			var vkUser = await _vkProvider.GetVkUser(fileDb.VkUserId, token);
+
+			return new InfoResponse
+			{
+				Id = fileDb.Id,
+				Title = fileDb.Title,
+				VkUser = vkUser,
+			};
 		}
-
-		if (System.IO.File.Exists("./db/files.txt") == false)
+		catch (ArgumentException ex)
 		{
-			await using var tmpFile = System.IO.File.Create("./db/files.txt");
+			return NotFound(ex);
 		}
-
-		var files = (await System.IO.File.ReadAllLinesAsync("./db/files.txt", token))
-			.Select(line => line.Split("|"))
-			.ToList();
-
-		var file = files.FirstOrDefault(line => line[0] == id.ToString());
-
-		if (file == null)
-		{
-			return NotFound();
-		}
-
-		var fileDb = new FileDb
-		{
-			Id = Guid.Parse(file[0]),
-			Title = file[1],
-			VkUserId = file[2],
-		};
-
-		var vkUser = await _vkProvider.GetVkUser(fileDb.VkUserId, token);
-
-		return new InfoResponse
-		{
-			Id = fileDb.Id,
-			Title = fileDb.Title,
-			VkUser = vkUser,
-		};
 	}
 
 	public void Dispose()

@@ -6,3 +6,8 @@ public class SaveRequest
 	public string Title { get; set; } = string.Empty;
 	public string VkLink { get; set; } = string.Empty;
 }
+
+public class SaveResponse
+{
+	public bool Ok { get; set; }
+}

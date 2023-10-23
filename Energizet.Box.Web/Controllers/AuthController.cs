@@ -17,11 +17,11 @@ public sealed class AuthController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<ActionResult<object>> Post(User user, CancellationToken token)
+	public async Task<ActionResult<object>> Auth(AuthRequest authRequest, CancellationToken token)
 	{
 		try
 		{
-			return await _authCases.AuthAsync(user.Uid, user.Hash, token);
+			return await _authCases.AuthAsync(authRequest.Uid, authRequest.Hash, token);
 		}
 		catch (HashIncorrectExceptions ex)
 		{

@@ -1,8 +1,8 @@
 ﻿namespace Energizet.Box.Web.Models.Auth;
 
-public class User
+public class AuthRequest
 {
-	public static readonly User Empty = new();
+	public static readonly AuthRequest Empty = new();
 
 	public int Uid { get; set; }
 	public string FirstName { get; set; } = string.Empty;

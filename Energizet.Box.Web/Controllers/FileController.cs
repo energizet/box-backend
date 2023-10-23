@@ -41,7 +41,9 @@ public sealed class FileController : ControllerBase
 	}
 
 	[HttpPost("[action]")]
-	public async Task<ActionResult<object>> Save(SaveRequest saveRequest, CancellationToken token)
+	public async Task<ActionResult<SaveResponse>> Save(
+		SaveRequest saveRequest, CancellationToken token
+	)
 	{
 		try
 		{
@@ -51,7 +53,7 @@ public sealed class FileController : ControllerBase
 			await _storeProvider.SaveAsync(saveRequest.Id);
 			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
 
-			return new
+			return new SaveResponse
 			{
 				Ok = true,
 			};

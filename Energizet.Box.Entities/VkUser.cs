@@ -1,4 +1,4 @@
-﻿namespace Energizet.Box.Vk.Abstractions.Model;
+﻿namespace Energizet.Box.Entities;
 
 public class VkUser
 {

@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Energizet.Box.Entities;
 using Energizet.Box.Exceptions;
 using Energizet.Box.Vk.Abstractions;
-using Energizet.Box.Vk.Abstractions.Model;
 using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;

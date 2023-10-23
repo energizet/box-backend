@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Exceptions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Db.Abstractions", "Energizet.Box.Db.Abstractions\Energizet.Box.Db.Abstractions.csproj", "{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Energizet.Box.Entities", "Energizet.Box.Entities\Energizet.Box.Entities.csproj", "{96F74C48-FF46-4BB0-AD5D-F70419ACA4E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB9877DC-2E1E-42C3-BCCC-C538A2BC2F10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96F74C48-FF46-4BB0-AD5D-F70419ACA4E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F74C48-FF46-4BB0-AD5D-F70419ACA4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F74C48-FF46-4BB0-AD5D-F70419ACA4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F74C48-FF46-4BB0-AD5D-F70419ACA4E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

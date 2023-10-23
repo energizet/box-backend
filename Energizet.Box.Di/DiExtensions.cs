@@ -36,7 +36,9 @@ public static class DiExtensions
 		);
 		collection.AddScoped<IVkProvider, VkProvider>();
 		collection.AddScoped<IDbProvider, DbProvider>();
+
 		collection.AddScoped<AuthCases>();
+		collection.AddScoped<FileCases>();
 
 		collection.AddTransient<HttpClient>();
 

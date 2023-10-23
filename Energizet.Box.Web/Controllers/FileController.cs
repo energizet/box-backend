@@ -1,7 +1,5 @@
-using Energizet.Box.Db.Abstractions;
+using Energizet.Box.Core;
 using Energizet.Box.Exceptions;
-using Energizet.Box.Store.Abstraction;
-using Energizet.Box.Vk.Abstractions;
 using Energizet.Box.Web.Models.File;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,17 +9,11 @@ namespace Energizet.Box.Web.Controllers;
 [ApiController]
 public sealed class FileController : ControllerBase
 {
-	private readonly IStoreProvider _storeProvider;
-	private readonly IVkProvider _vkProvider;
-	private readonly IDbProvider _dbProvider;
+	private readonly FileCases _fileCases;
 
-	public FileController(
-		IStoreProvider storeProvider, IVkProvider vkProvider, IDbProvider dbProvider
-	)
+	public FileController(FileCases fileCases)
 	{
-		_storeProvider = storeProvider;
-		_vkProvider = vkProvider;
-		_dbProvider = dbProvider;
+		_fileCases = fileCases;
 	}
 
 	[HttpPost("[action]")]
@@ -33,8 +25,7 @@ public sealed class FileController : ControllerBase
 		await file.CopyToAsync(streamFile, token);
 		streamFile.Position = 0;
 
-		var id = await _dbProvider.NewAsync(token);
-		await _storeProvider.NewAsync(id, streamFile, token);
+		var id = await _fileCases.CreateAsync(streamFile, token);
 
 		return new UploadResponse
 		{
@@ -44,16 +35,12 @@ public sealed class FileController : ControllerBase
 
 	[HttpPost("[action]")]
 	public async Task<ActionResult<SaveResponse>> Save(
-		SaveRequest saveRequest, CancellationToken token
+		SaveRequest request, CancellationToken token
 	)
 	{
 		try
 		{
-			var vkId = saveRequest.VkLink.Split("/").Last();
-			var vkUser = await _vkProvider.GetVkUser(vkId, token);
-
-			await _storeProvider.SaveAsync(saveRequest.Id, token);
-			await _dbProvider.SaveAsync(saveRequest.Id, saveRequest.Title, vkUser.Id, token);
+			await _fileCases.SaveAsync(request.Id, request.Title, request.VkLink, token);
 
 			return new SaveResponse
 			{
@@ -71,14 +58,13 @@ public sealed class FileController : ControllerBase
 	{
 		try
 		{
-			var fileDb = await _dbProvider.Find(id, token);
-			var vkUser = await _vkProvider.GetVkUser(fileDb.VkUserId, token);
+			var info = await _fileCases.InfoAsync(id, token);
 
 			return new InfoResponse
 			{
-				Id = fileDb.Id,
-				Title = fileDb.Title,
-				VkUser = vkUser,
+				Id = info.Id,
+				Title = info.Title,
+				VkUser = info.VkUser,
 			};
 		}
 		catch (NotFoundException ex)

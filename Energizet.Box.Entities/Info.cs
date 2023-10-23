@@ -1,8 +1,6 @@
-﻿using Energizet.Box.Entities;
+﻿namespace Energizet.Box.Entities;
 
-namespace Energizet.Box.Web.Models.File;
-
-public class InfoResponse
+public class Info
 {
 	public Guid Id { get; set; }
 	public string Title { get; set; } = string.Empty;

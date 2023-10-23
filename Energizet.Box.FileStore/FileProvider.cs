@@ -1,6 +1,6 @@
 ﻿namespace Energizet.Box.FileStore;
 
-public class FileProvider
+public sealed class FileProvider
 {
 	private readonly string _tempDir;
 	private readonly string _storeDir;

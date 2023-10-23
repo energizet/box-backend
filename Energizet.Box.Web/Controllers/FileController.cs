@@ -9,7 +9,7 @@ namespace Energizet.Box.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FileController : ControllerBase, IDisposable
+public sealed class FileController : ControllerBase, IDisposable
 {
 	private readonly FileProvider _fileProvider;
 	private readonly VkProvider _vkProvider;

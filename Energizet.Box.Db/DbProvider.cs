@@ -2,7 +2,7 @@
 
 namespace Energizet.Box.Db;
 
-public class DbProvider
+public sealed class DbProvider
 {
 	public async Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token

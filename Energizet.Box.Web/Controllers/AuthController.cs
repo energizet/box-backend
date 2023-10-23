@@ -7,7 +7,7 @@ namespace Energizet.Box.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase, IDisposable
+public sealed class AuthController : ControllerBase, IDisposable
 {
 	private readonly AuthProvider _authProvider;
 

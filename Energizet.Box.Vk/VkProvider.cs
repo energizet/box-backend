@@ -5,7 +5,7 @@ using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;
 
-public class VkProvider : IDisposable
+public sealed class VkProvider : IDisposable
 {
 	private readonly HttpClient _client;
 

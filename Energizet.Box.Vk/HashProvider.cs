@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Energizet.Box.Vk;
 
-public class HashProvider : IDisposable
+public sealed class HashProvider : IDisposable
 {
 	private readonly HashAlgorithm _hashAlgorithm;
 

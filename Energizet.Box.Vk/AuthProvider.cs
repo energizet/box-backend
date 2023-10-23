@@ -3,7 +3,7 @@ using Energizet.Box.Vk.Model;
 
 namespace Energizet.Box.Vk;
 
-public class AuthProvider : IDisposable
+public sealed class AuthProvider : IDisposable
 {
 	private readonly VkConfig _vkConfig;
 	private readonly HashProvider _hashProvider;

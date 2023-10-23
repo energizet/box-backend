@@ -18,4 +18,7 @@ public class VkUser
 
 	[JsonPropertyName("last_name")]
 	public string LastName { get; set; } = string.Empty;
+
+	[JsonPropertyName("photo")]
+	public string Photo { get; set; } = string.Empty;
 }

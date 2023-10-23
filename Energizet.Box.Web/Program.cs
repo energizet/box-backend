@@ -1,4 +1,4 @@
-using Energizet.Box.Web.Models;
+using Energizet.Box.Di;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<VkConfig>(builder.Configuration.GetSection(nameof(VkConfig)));
+builder.Services.AddConfiguration(builder.Configuration);
+builder.Services.AddDi();
 
 var app = builder.Build();
 

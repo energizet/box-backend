@@ -18,4 +18,10 @@
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Energizet.Box.Auth\Energizet.Box.Auth.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Di\Energizet.Box.Di.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Entities\Energizet.Box.Entities.csproj" />
+    </ItemGroup>
+
 </Project>

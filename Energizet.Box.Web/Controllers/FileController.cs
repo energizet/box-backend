@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Energizet.Box.Entities;
 using Energizet.Box.Web.Models;
 using Energizet.Box.Web.Models.File;
 using Microsoft.AspNetCore.Mvc;

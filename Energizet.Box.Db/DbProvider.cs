@@ -6,15 +6,26 @@ namespace Energizet.Box.Db;
 
 public sealed class DbProvider : IDbProvider
 {
+	private readonly HashSet<Guid> _ids = new();
+
 	public Task<Guid> NewAsync(CancellationToken token)
 	{
-		return Task.FromResult(Guid.NewGuid());
+		var id = Guid.NewGuid();
+		_ids.Add(id);
+		return Task.FromResult(id);
 	}
 
 	public async Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token
 	)
 	{
+		if (_ids.Contains(id) == false)
+		{
+			throw new NotFoundException($"id({id}) not found");
+		}
+
+		_ids.Remove(id);
+
 		await CreateDbAsync();
 
 		await File.AppendAllLinesAsync(

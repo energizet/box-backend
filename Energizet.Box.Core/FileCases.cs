@@ -33,8 +33,8 @@ public sealed class FileCases
 		var vkId = vkLink.Split("/").Last();
 		var vkUser = await _vkProvider.GetVkUser(vkId, token);
 
-		await _storeProvider.SaveAsync(id, token);
 		await _dbProvider.SaveAsync(id, title, vkUser.Id, token);
+		await _storeProvider.SaveAsync(id, token);
 	}
 
 	public async Task<Info> InfoAsync(Guid id, CancellationToken token)

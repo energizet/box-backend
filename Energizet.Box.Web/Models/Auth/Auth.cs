@@ -11,3 +11,8 @@ public class AuthRequest
 	public string PhotoRec { get; set; } = string.Empty;
 	public string Hash { get; set; } = string.Empty;
 }
+
+public class AuthResponse
+{
+	public string Token { get; set; } = string.Empty;
+}

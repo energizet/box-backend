@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Energizet.Box.Di\Energizet.Box.Di.csproj" />
       <ProjectReference Include="..\Energizet.Box.Entities\Energizet.Box.Entities.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Jwt\Energizet.Box.Jwt.csproj" />
     </ItemGroup>
 
 </Project>

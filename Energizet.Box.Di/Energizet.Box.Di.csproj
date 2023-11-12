@@ -10,6 +10,7 @@
       <ProjectReference Include="..\Energizet.Box.Core\Energizet.Box.Core.csproj" />
       <ProjectReference Include="..\Energizet.Box.Db\Energizet.Box.Db.csproj" />
       <ProjectReference Include="..\Energizet.Box.FileStore\Energizet.Box.FileStore.csproj" />
+      <ProjectReference Include="..\Energizet.Box.Jwt\Energizet.Box.Jwt.csproj" />
       <ProjectReference Include="..\Energizet.Box.Vk\Energizet.Box.Vk.csproj" />
     </ItemGroup>
 

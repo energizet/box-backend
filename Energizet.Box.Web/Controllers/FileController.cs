@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Energizet.Box.Core;
 using Energizet.Box.Exceptions;
 using Energizet.Box.Web.Models.File;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Energizet.Box.Web.Controllers;
@@ -49,13 +51,15 @@ public sealed class FileController : ControllerBase
 		}
 		catch (NotFoundException ex)
 		{
-			return NotFound(ex);
+			return NotFound(ex.ToString());
 		}
 	}
 
 	[HttpGet("{id:guid}")]
+	[Authorize(Roles = "user")]
 	public async Task<ActionResult<InfoResponse>> Info(Guid id, CancellationToken token)
 	{
+		var role = HttpContext.User.FindFirst(ClaimTypes.Role);
 		try
 		{
 			var info = await _fileCases.InfoAsync(id, token);
@@ -69,7 +73,7 @@ public sealed class FileController : ControllerBase
 		}
 		catch (NotFoundException ex)
 		{
-			return NotFound(ex);
+			return NotFound(ex.ToString());
 		}
 	}
 }

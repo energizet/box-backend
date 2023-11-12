@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddConfiguration(builder.Configuration);
 builder.Services.AddDi();
+builder.Services.AddAuth(builder.Configuration);
 
 var app = builder.Build();
 

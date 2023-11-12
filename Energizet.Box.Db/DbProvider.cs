@@ -1,66 +1,73 @@
-﻿using Energizet.Box.Db.Abstractions;
+﻿using System.Text.Json;
+using Energizet.Box.Db.Abstractions;
 using Energizet.Box.Db.Abstractions.Model;
+using Energizet.Box.Db.Entity;
 using Energizet.Box.Exceptions;
 
 namespace Energizet.Box.Db;
 
 public sealed class DbProvider : IDbProvider
 {
-	private readonly HashSet<Guid> _ids = new();
+	private static Dictionary<Guid, FileEntity> s_fileDb = new();
 
-	public Task<Guid> NewAsync(CancellationToken token)
+	static DbProvider()
+	{
+		LoadDbAsync().Wait();
+	}
+
+	public async Task<Guid> NewAsync(string contentType, CancellationToken token)
 	{
 		var id = Guid.NewGuid();
-		_ids.Add(id);
-		return Task.FromResult(id);
+		s_fileDb[id] = new()
+		{
+			Id = id,
+			ContentType = contentType,
+		};
+		await SaveDbAsync();
+		return id;
 	}
 
 	public async Task SaveAsync(
 		Guid id, string title, int vkUserId, CancellationToken token
 	)
 	{
-		if (_ids.Contains(id) == false)
+		if (s_fileDb.ContainsKey(id) == false)
 		{
 			throw new NotFoundException($"id({id}) not found");
 		}
 
-		_ids.Remove(id);
+		s_fileDb[id].Title = title;
+		s_fileDb[id].VkUserId = vkUserId;
+		s_fileDb[id].IsSaved = true;
 
-		await CreateDbAsync();
-
-		await File.AppendAllLinesAsync(
-			"./db/files.txt",
-			new[]
-			{
-				$"{id}|{title}|{vkUserId}",
-			},
-			token
-		);
+		await SaveDbAsync();
 	}
 
-	public async Task<FileDb> Find(Guid id, CancellationToken token)
+	public Task<FileDb> FindAsync(Guid id, CancellationToken token)
 	{
-		await CreateDbAsync();
-
-		var files = (await File.ReadAllLinesAsync("./db/files.txt", token))
-			.Select(line => line.Split("|"))
-			.ToList();
-
-		var file = files.FirstOrDefault(line => line[0] == id.ToString());
-
-		if (file == null)
+		if (s_fileDb.ContainsKey(id) == false || s_fileDb[id].IsSaved == false)
 		{
 			throw new NotFoundException($"id({id}) not found");
 		}
+
+		var file = s_fileDb[id];
 
 		var fileDb = new FileDb
 		{
-			Id = Guid.Parse(file[0]),
-			Title = file[1],
-			VkUserId = file[2],
+			Id = file.Id,
+			Title = file.Title!,
+			VkUserId = file.VkUserId.ToString()!,
+			ContentType = file.ContentType,
 		};
 
-		return fileDb;
+		return Task.FromResult(fileDb);
+	}
+
+	private static async Task LoadDbAsync()
+	{
+		await CreateDbAsync();
+		var json = await File.ReadAllTextAsync("./db/files.db");
+		s_fileDb = JsonSerializer.Deserialize<Dictionary<Guid, FileEntity>>(json)!;
 	}
 
 	private static async Task CreateDbAsync()
@@ -70,9 +77,15 @@ public sealed class DbProvider : IDbProvider
 			Directory.CreateDirectory("./db");
 		}
 
-		if (File.Exists("./db/files.txt") == false)
+		if (File.Exists("./db/files.db") == false)
 		{
-			await using var tmpFile = File.Create("./db/files.txt");
+			await File.Create("./db/files.db").DisposeAsync();
+			await SaveDbAsync();
 		}
+	}
+
+	private static async Task SaveDbAsync()
+	{
+		await File.WriteAllTextAsync("./db/files.db", JsonSerializer.Serialize(s_fileDb));
 	}
 }

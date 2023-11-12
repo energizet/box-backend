@@ -27,7 +27,7 @@ public sealed class FileController : ControllerBase
 		await file.CopyToAsync(streamFile, token);
 		streamFile.Position = 0;
 
-		var id = await _fileCases.CreateAsync(streamFile, token);
+		var id = await _fileCases.CreateAsync(streamFile, file.ContentType, token);
 
 		return new UploadResponse
 		{
@@ -56,10 +56,8 @@ public sealed class FileController : ControllerBase
 	}
 
 	[HttpGet("{id:guid}")]
-	[Authorize(Roles = "user")]
 	public async Task<ActionResult<InfoResponse>> Info(Guid id, CancellationToken token)
 	{
-		var role = HttpContext.User.FindFirst(ClaimTypes.Role);
 		try
 		{
 			var info = await _fileCases.InfoAsync(id, token);
@@ -70,6 +68,23 @@ public sealed class FileController : ControllerBase
 				Title = info.Title,
 				VkUser = info.VkUser,
 			};
+		}
+		catch (NotFoundException ex)
+		{
+			return NotFound(ex.ToString());
+		}
+	}
+
+	[HttpGet("/[controller]/{id:guid}")]
+	[Authorize(Roles = "user")]
+	public async Task<IActionResult> Download(Guid id, CancellationToken token)
+	{
+		var role = HttpContext.User.FindFirst(ClaimTypes.Role);
+		try
+		{
+			var file = await _fileCases.GetAsync(id, token);
+			await using var stream = file.Stream;
+			return File(stream, file.ContentType);
 		}
 		catch (NotFoundException ex)
 		{

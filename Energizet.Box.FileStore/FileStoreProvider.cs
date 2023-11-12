@@ -30,6 +30,12 @@ public sealed class FileStoreProvider : IStoreProvider
 		return Task.CompletedTask;
 	}
 
+	public Task<Stream> GetAsync(Guid id, CancellationToken token)
+	{
+		var fileName = CreatePath(_storeDir, id);
+		return Task.FromResult((Stream)File.OpenRead(fileName));
+	}
+
 	private Task<Stream> CreateAsync(string dir, Guid id)
 	{
 		return Task.FromResult((Stream)File.Create(CreatePath(dir, id)));

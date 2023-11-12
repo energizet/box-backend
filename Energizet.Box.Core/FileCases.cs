@@ -20,9 +20,10 @@ public sealed class FileCases
 		_dbProvider = dbProvider;
 	}
 
-	public async Task<Guid> CreateAsync(Stream streamFile, CancellationToken token)
+	public async Task<Guid> CreateAsync(Stream streamFile, string contentType,
+		CancellationToken token)
 	{
-		var id = await _dbProvider.NewAsync(token);
+		var id = await _dbProvider.NewAsync(contentType, token);
 		await _storeProvider.NewAsync(id, streamFile, token);
 
 		return id;
@@ -39,9 +40,9 @@ public sealed class FileCases
 
 	public async Task<Info> InfoAsync(Guid id, CancellationToken token)
 	{
-		var fileDb = await _dbProvider.Find(id, token);
+		var fileDb = await _dbProvider.FindAsync(id, token);
 		var vkUser = await _vkProvider.GetVkUser(fileDb.VkUserId, token);
-		
+
 		return new()
 		{
 			Id = fileDb.Id,
@@ -49,4 +50,22 @@ public sealed class FileCases
 			VkUser = vkUser,
 		};
 	}
+
+	public async Task<File> GetAsync(Guid id, CancellationToken token)
+	{
+		var fileDb = await _dbProvider.FindAsync(id, token);
+		var fileStream = await _storeProvider.GetAsync(id, token);
+
+		return new()
+		{
+			ContentType = fileDb.ContentType,
+			Stream = fileStream,
+		};
+	}
+}
+
+public class File
+{
+	public string ContentType { get; set; } = string.Empty;
+	public Stream Stream { get; set; } = Stream.Null;
 }

@@ -7,3 +7,4 @@ riderModule.iml
 .vs/
 Energizet.Box.Front/
 appsettings.Development.json
+/publish

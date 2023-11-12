@@ -88,6 +88,6 @@ public sealed class DbProvider : IDbProvider
 
 	private static async Task SaveDbAsync()
 	{
-		await File.WriteAllTextAsync("./db/files.db", JsonSerializer.Serialize(FileDb));
+		await File.WriteAllTextAsync("./db/files.db", JsonSerializer.Serialize(FileDb ?? new()));
 	}
 }

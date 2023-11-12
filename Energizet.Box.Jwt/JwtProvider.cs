@@ -24,8 +24,8 @@ public sealed class JwtProvider : IJwtProvider
 			_jwtConfig.Audience,
 			new[]
 			{
-				new Claim(ClaimTypes.Sid, vkUserId.ToString()),
-				new Claim(ClaimTypes.Name, vkUserId.ToString()),
+				new Claim(ClaimTypes.Sid, vkUserId.ToString(), ClaimValueTypes.Integer),
+				new Claim(ClaimTypes.Name, vkUserId.ToString(), ClaimValueTypes.Integer),
 				new Claim(ClaimTypes.Role, "user"),
 			},
 			expires: DateTime.Now.Add(TimeSpan.FromMinutes(_jwtConfig.ExpiresInMinutes)),

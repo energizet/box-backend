@@ -1,5 +1,6 @@
 ﻿using Energizet.Box.Db.Abstractions;
 using Energizet.Box.Entities;
+using Energizet.Box.Exceptions;
 using Energizet.Box.Store.Abstraction;
 using Energizet.Box.Vk.Abstractions;
 
@@ -51,9 +52,14 @@ public sealed class FileCases
 		};
 	}
 
-	public async Task<File> GetAsync(Guid id, CancellationToken token)
+	public async Task<File> GetAsync(Guid id, string vkUserId, CancellationToken token)
 	{
 		var fileDb = await _dbProvider.FindAsync(id, token);
+		if (fileDb.VkUserId != vkUserId)
+		{
+			throw new ForbiddenException($"vkUserId({vkUserId}) forbidden");
+		}
+
 		var fileStream = await _storeProvider.GetAsync(id, token);
 
 		return new()

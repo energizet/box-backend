@@ -8,17 +8,19 @@ namespace Energizet.Box.Db;
 
 public sealed class DbProvider : IDbProvider
 {
-	private static Dictionary<Guid, FileEntity> s_fileDb = new();
+	private static readonly Dictionary<Guid, FileEntity> FileDb;
 
 	static DbProvider()
 	{
-		LoadDbAsync().Wait();
+		var db = LoadDbAsync();
+		db.Wait();
+		FileDb = db.Result;
 	}
 
 	public async Task<Guid> NewAsync(string contentType, CancellationToken token)
 	{
 		var id = Guid.NewGuid();
-		s_fileDb[id] = new()
+		FileDb[id] = new()
 		{
 			Id = id,
 			ContentType = contentType,
@@ -31,26 +33,26 @@ public sealed class DbProvider : IDbProvider
 		Guid id, string title, int vkUserId, CancellationToken token
 	)
 	{
-		if (s_fileDb.ContainsKey(id) == false)
+		if (FileDb.ContainsKey(id) == false)
 		{
 			throw new NotFoundException($"id({id}) not found");
 		}
 
-		s_fileDb[id].Title = title;
-		s_fileDb[id].VkUserId = vkUserId;
-		s_fileDb[id].IsSaved = true;
+		FileDb[id].Title = title;
+		FileDb[id].VkUserId = vkUserId;
+		FileDb[id].IsSaved = true;
 
 		await SaveDbAsync();
 	}
 
 	public Task<FileDb> FindAsync(Guid id, CancellationToken token)
 	{
-		if (s_fileDb.ContainsKey(id) == false || s_fileDb[id].IsSaved == false)
+		if (FileDb.ContainsKey(id) == false || FileDb[id].IsSaved == false)
 		{
 			throw new NotFoundException($"id({id}) not found");
 		}
 
-		var file = s_fileDb[id];
+		var file = FileDb[id];
 
 		var fileDb = new FileDb
 		{
@@ -63,11 +65,11 @@ public sealed class DbProvider : IDbProvider
 		return Task.FromResult(fileDb);
 	}
 
-	private static async Task LoadDbAsync()
+	private static async Task<Dictionary<Guid, FileEntity>> LoadDbAsync()
 	{
 		await CreateDbAsync();
 		var json = await File.ReadAllTextAsync("./db/files.db");
-		s_fileDb = JsonSerializer.Deserialize<Dictionary<Guid, FileEntity>>(json)!;
+		return JsonSerializer.Deserialize<Dictionary<Guid, FileEntity>>(json)!;
 	}
 
 	private static async Task CreateDbAsync()
@@ -86,6 +88,6 @@ public sealed class DbProvider : IDbProvider
 
 	private static async Task SaveDbAsync()
 	{
-		await File.WriteAllTextAsync("./db/files.db", JsonSerializer.Serialize(s_fileDb));
+		await File.WriteAllTextAsync("./db/files.db", JsonSerializer.Serialize(FileDb));
 	}
 }

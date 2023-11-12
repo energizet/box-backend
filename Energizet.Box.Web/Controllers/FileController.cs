@@ -75,20 +75,24 @@ public sealed class FileController : ControllerBase
 		}
 	}
 
-	[HttpGet("/[controller]/{id:guid}")]
+	[HttpGet("{id:guid}/[action]")]
 	[Authorize(Roles = "user")]
 	public async Task<IActionResult> Download(Guid id, CancellationToken token)
 	{
-		var role = HttpContext.User.FindFirst(ClaimTypes.Role);
 		try
 		{
-			var file = await _fileCases.GetAsync(id, token);
-			await using var stream = file.Stream;
+			var vkUserId = HttpContext.User.FindFirst(ClaimTypes.Sid)!.Value;
+			var file = await _fileCases.GetAsync(id, vkUserId, token);
+			var stream = file.Stream;
 			return File(stream, file.ContentType);
 		}
 		catch (NotFoundException ex)
 		{
 			return NotFound(ex.ToString());
+		}
+		catch (ForbiddenException)
+		{
+			return Forbid();
 		}
 	}
 }

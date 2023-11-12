@@ -84,7 +84,7 @@ public sealed class FileController : ControllerBase
 			var vkUserId = HttpContext.User.FindFirst(ClaimTypes.Sid)!.Value;
 			var file = await _fileCases.GetAsync(id, vkUserId, token);
 			var stream = file.Stream;
-			return File(stream, file.ContentType);
+			return File(stream, file.ContentType, file.FileName);
 		}
 		catch (NotFoundException ex)
 		{

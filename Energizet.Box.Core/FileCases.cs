@@ -64,6 +64,7 @@ public sealed class FileCases
 
 		return new()
 		{
+			FileName = fileDb.Title,
 			ContentType = fileDb.ContentType,
 			Stream = fileStream,
 		};
@@ -72,6 +73,7 @@ public sealed class FileCases
 
 public class File
 {
+	public string FileName { get; set; } = string.Empty;
 	public string ContentType { get; set; } = string.Empty;
 	public Stream Stream { get; set; } = Stream.Null;
 }

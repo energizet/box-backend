@@ -28,8 +28,7 @@ app.UseCors(policyBuilder =>
 {
 	policyBuilder
 		.WithOrigins(
-			"https://energizet.ru",
-			"http://localhost:3000"
+			builder.Configuration.GetSection("CorsOrigins").Get<string[]>()!
 		)
 		.AllowAnyHeader()
 		.AllowAnyMethod();
